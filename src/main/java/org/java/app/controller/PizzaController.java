@@ -1,6 +1,7 @@
 package org.java.app.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.java.app.db.pojo.Deal;
 import org.java.app.db.pojo.Pizza;
@@ -53,7 +54,12 @@ public class PizzaController {
 	
 	@GetMapping("/{id}")
 	public String show(@PathVariable int id, Model model) {
-		Pizza pizza = pizzaService.findById(id);
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return "redirect:/";
+		
+		Pizza pizza = optPizza.get();
 		
 		List<Deal> activeDeals = pizza.getDeals().stream().filter(deal -> deal.isAfterOrEqual(deal.getEndDate())).toList();
 		
@@ -85,7 +91,14 @@ public class PizzaController {
 	
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable int id, Model model) {
-		model.addAttribute("pizza", pizzaService.findById(id));
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return "redirect:/";
+		
+		Pizza pizza = optPizza.get();
+		
+		model.addAttribute("pizza", pizza);
 		model.addAttribute("ingredients", ingredientService.findAll());
 		
 		return "/pizza/create-update";
@@ -97,7 +110,7 @@ public class PizzaController {
 	}
 	
 	@PostMapping("/delete/{id}")
-	public String delete(@PathVariable int id, Model model) {		
+	public String delete(@PathVariable int id, Model model) {
 		pizzaService.deleteById(id);
 		
 		return "redirect:/";

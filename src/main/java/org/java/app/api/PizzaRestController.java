@@ -1,6 +1,7 @@
 package org.java.app.api;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.java.app.api.dto.PizzaDto;
 import org.java.app.db.pojo.Pizza;
@@ -46,7 +47,12 @@ public class PizzaRestController {
 	
 	@PostMapping("/{id}")
 	public ResponseEntity<Pizza> getPizza(@PathVariable int id) {
-		Pizza pizza = pizzaService.findById(id);
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		
+		Pizza pizza = optPizza.get();
 		
 		return new ResponseEntity<Pizza>(pizza, HttpStatus.OK);
 	}
@@ -62,6 +68,11 @@ public class PizzaRestController {
 	
 	@PutMapping("{id}")
 	public ResponseEntity<Pizza> updatePizza(@PathVariable int id, @RequestBody PizzaDto pizzaDto) {
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		
 		Pizza pizza = new Pizza(pizzaDto);
 		pizza.setId(id);
 		
@@ -72,6 +83,11 @@ public class PizzaRestController {
 	
 	@DeleteMapping("{id}")
 	public ResponseEntity<String> deletePizza(@PathVariable int id) {
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		
 		pizzaService.deleteById(id);
 		
 		return new ResponseEntity<String>("Successfully removed", HttpStatus.OK);

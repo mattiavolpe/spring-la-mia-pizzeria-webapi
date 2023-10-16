@@ -1,6 +1,9 @@
 package org.java.app.controller;
 
+import java.util.Optional;
+
 import org.java.app.db.pojo.Deal;
+import org.java.app.db.pojo.Pizza;
 import org.java.app.db.service.DealService;
 import org.java.app.db.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +28,15 @@ public class DealController {
 	
 	@GetMapping("/{pizza_id}/new-deal")
 	public String create(@PathVariable("pizza_id") int id, Model model) {
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return "redirect:/";
+		
+		Pizza pizza = optPizza.get();
+		
 		model.addAttribute("deal", new Deal());
-		model.addAttribute("pizza", pizzaService.findById(id));
+		model.addAttribute("pizza", pizza);
 		model.addAttribute("pizzas", pizzaService.findAll());
 		
 		return "/deal/create-update";
@@ -34,13 +44,20 @@ public class DealController {
 	
 	@PostMapping("/{pizza_id}/new-deal")
 	public String store(@PathVariable("pizza_id") int id, @Valid @ModelAttribute Deal deal, BindingResult bindingResult, Model model) {
+		Optional<Pizza> optPizza = pizzaService.findById(id);
+		
+		if (optPizza.isEmpty())
+			return "redirect:/";
+		
+		Pizza pizza = optPizza.get();
+		
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("pizza", pizzaService.findById(id));
+			model.addAttribute("pizza", pizza);
 			
 			return "/deal/create-update";
 		}
 		
-		deal.setPizza(pizzaService.findById(id));
+		deal.setPizza(pizza);
 		
 		dealService.saveDeal(deal);
 		
@@ -59,7 +76,7 @@ public class DealController {
 	}
 	
 	@PostMapping("/deals/edit/{id}")
-	public String update(@PathVariable int id, @Valid @ModelAttribute Deal deal, BindingResult bindingResult, Model model) {		
+	public String update(@PathVariable int id, @Valid @ModelAttribute Deal deal, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("pizza", pizzaService.findById(deal.getPizza().getId()));
 			model.addAttribute("pizzas", pizzaService.findAll());
