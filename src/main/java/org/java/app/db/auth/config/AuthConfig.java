@@ -15,7 +15,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class AuthConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests()
+		http.csrf().disable()
+		.authorizeHttpRequests()
+		.requestMatchers("/api/v1/**").permitAll()
 		.requestMatchers(adminRequestMatcher()).hasAuthority("Admin")
 		.requestMatchers(userRequestMatcher()).hasAuthority("User")
 		.requestMatchers("/**").permitAll()
