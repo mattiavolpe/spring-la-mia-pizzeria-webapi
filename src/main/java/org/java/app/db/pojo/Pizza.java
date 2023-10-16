@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
+import org.java.app.api.dto.PizzaDto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -71,6 +72,13 @@ public class Pizza {
 		setUrl(url);
 		setPrice(price);
 		setIngredients(new HashSet<>(Arrays.asList(ingredients)));
+	}
+	
+	public Pizza(PizzaDto pizzaDto) {
+		setName(pizzaDto.getName());
+		setDescription(pizzaDto.getDescription());
+		setUrl(pizzaDto.getUrl());
+		setPrice(pizzaDto.getPrice());
 	}
 
 	public int getId() {
