@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,7 +57,7 @@ public class PizzaRestController {
 		
 		pizzaService.savePizza(pizza);
 		
-		return new ResponseEntity<>(pizza.getId(), HttpStatus.OK);
+		return new ResponseEntity<Integer>(pizza.getId(), HttpStatus.OK);
 	}
 	
 	@PutMapping("{id}")
@@ -67,5 +68,12 @@ public class PizzaRestController {
 		pizzaService.savePizza(pizza);
 		
 		return new ResponseEntity<Pizza>(pizza, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("{id}")
+	public ResponseEntity<String> deletePizza(@PathVariable int id) {
+		pizzaService.deleteById(id);
+		
+		return new ResponseEntity<String>("Successfully removed", HttpStatus.OK);
 	}
 }
