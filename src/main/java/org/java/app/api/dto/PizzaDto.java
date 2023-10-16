@@ -2,18 +2,11 @@ package org.java.app.api.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public class PizzaDto {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
 	
 	@NotBlank(message = "This field is required")
 	@Length(min = 3, max = 100, message = "Insert between 3 and 100 characters")
@@ -39,14 +32,6 @@ public class PizzaDto {
 		setDescription(description);
 		setUrl(url);
 		setPrice(price);
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {
