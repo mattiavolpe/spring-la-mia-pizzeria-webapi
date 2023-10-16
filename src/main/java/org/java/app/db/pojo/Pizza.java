@@ -166,6 +166,13 @@ public class Pizza {
 	public String getFormattedDiscountedPrice(float discount) {
 		return String.format("%.02f", (((float) getPrice() * ((100f - discount) / 100f)) / 100f));
 	}
+	
+	public void updateFromDto(PizzaDto pizzaDto) {
+		setName(pizzaDto.getName());
+		setDescription(pizzaDto.getDescription());
+		setUrl(pizzaDto.getUrl());
+		setPrice(pizzaDto.getPrice());
+	}
 
 	@Override
 	public String toString() {

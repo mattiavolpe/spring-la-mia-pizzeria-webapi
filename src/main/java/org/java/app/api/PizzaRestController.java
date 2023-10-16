@@ -73,8 +73,9 @@ public class PizzaRestController {
 		if (optPizza.isEmpty())
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		
-		Pizza pizza = new Pizza(pizzaDto);
-		pizza.setId(id);
+		Pizza pizza = optPizza.get();
+		
+		pizza.updateFromDto(pizzaDto);
 		
 		pizzaService.savePizza(pizza);
 		
