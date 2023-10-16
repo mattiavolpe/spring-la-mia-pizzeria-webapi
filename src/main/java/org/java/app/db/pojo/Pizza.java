@@ -8,6 +8,9 @@ import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,9 +56,11 @@ public class Pizza {
 	private float discount = 0;
 	
 	@OneToMany(mappedBy = "pizza", cascade = CascadeType.REMOVE)
+	@JsonManagedReference
 	private List<Deal> deals;
 	
 	@ManyToMany
+	@JsonManagedReference
 	private Set<Ingredient> ingredients;
 	
 	public Pizza() {};
@@ -108,6 +113,7 @@ public class Pizza {
 		this.price = price;
 	}
 	
+	@JsonIgnore
 	public float getDiscount() {
 		return discount;
 	}
@@ -144,6 +150,7 @@ public class Pizza {
 		getDeals().remove(deal);
 	}
 
+	@JsonIgnore
 	public String getFormattedPrice() {
 		return String.format("%.02f", ((float) getPrice() / 100f));
 	}
