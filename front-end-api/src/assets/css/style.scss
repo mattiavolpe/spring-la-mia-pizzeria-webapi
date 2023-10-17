@@ -1,0 +1,7 @@
+@use "/node_modules/bootstrap/scss/bootstrap.scss";
+@use "./partials/_variables.scss" as *;
+
+body {
+  background-color: $black;
+  color: $white;
+}
