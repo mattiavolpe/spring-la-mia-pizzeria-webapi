@@ -7,6 +7,8 @@
 
   const pizzas = ref([]);
 
+  const filter = ref("");
+
   onMounted(() => {
     fetchAllPizzas();
   })
@@ -20,6 +22,18 @@
     .catch(error => {
       console.error(error);
     })
+  }
+
+  function filterPizzas(filter) {
+    if (filter === "") {
+      fetchAllPizzas()
+    } else {
+      axios
+      .get(`${API_URL}/filter/${filter}`)
+      .then(res => {
+        pizzas.value = res.data;
+      })
+    }
   }
 
   function deletePizza(id) {
@@ -40,6 +54,16 @@
 <template>
   <main class="container py-5">
     <h1 class="text-center">PIZZAS</h1>
+
+    <form v-if="pizzas.length > 0" @submit.prevent="filterPizzas(filter)" class="my-3">
+      <label for="filter">Search</label>
+      <br />
+      <div class="d-flex align-items-center gap-3">
+        <input type="text" name="filter" id="filter" placeholder="Type a filter..." v-model="filter">
+        <button class="btn btn-outline-light" type="submit">Search</button>
+      </div>
+    </form>
+
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
       <div v-for="pizza in pizzas" class="col">
         <div class="card h-100">
