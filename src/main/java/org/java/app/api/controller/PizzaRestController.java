@@ -1,4 +1,4 @@
-package org.java.app.api;
+package org.java.app.api.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/pizzas")
 public class PizzaRestController {
 	
 	@Autowired
