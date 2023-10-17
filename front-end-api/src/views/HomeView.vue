@@ -33,6 +33,9 @@
       .then(res => {
         pizzas.value = res.data;
       })
+      .catch(error => {
+        console.error(error);
+      })
     }
   }
 
@@ -40,7 +43,7 @@
     axios
     .delete(`${API_URL}/${id}`)
     .then(res => {
-      if (res.data === "Successfully removed") {
+      if (res.status === 200) {
         fetchAllPizzas();
       }
     })
@@ -64,21 +67,33 @@
       </div>
     </form>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
+    <div class="my-5">
+      <router-link to="/create" class="btn btn-outline-light">Insert a new pizza</router-link>
+    </div>
+
+    <div v-if="pizzas.length > 0" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
       <div v-for="pizza in pizzas" class="col">
         <div class="card h-100">
           <div class="card-header">
             <img :src="pizza.url" alt="" class="card-img-top">
           </div>
           <div class="card-body text-center">
-            <h3 class="mb-0">{{ pizza.name }}</h3>
+            <h3>{{ pizza.name }}</h3>
+            <h4 class="mb-0">{{ pizza.price / 100 }}€</h4>
+            <hr class="w-50 mx-auto">
+            <p>{{ pizza.description }}</p>
+            <hr class="w-50 mx-auto">
           </div>
           <div class="card-footer text-center">
+            <router-link :to="{name: 'edit', params: { 'id': pizza.id }}" class="text-primary text-decoration-none fw-bold border-0 bg-transparent delete_button">EDIT PIZZA</router-link>
+            <br />
             <button class="text-danger fw-bold border-0 bg-transparent delete_button" @click="deletePizza(pizza.id)">DELETE PIZZA</button>
           </div>
         </div>
       </div>
     </div>
+
+    <h3 v-else>NO PIZZAS FOUND</h3>
   </main>
 </template>
 
