@@ -32,7 +32,7 @@
 
   function fetchPizza(id) {
     axios
-    .post(`${API_URL}/${id}`)
+    .get(`${API_URL}/${id}`)
     .then(res => {
       if (res.status === 200) {
         pizza.value = res.data;

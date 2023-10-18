@@ -45,7 +45,7 @@ public class PizzaRestController {
 		return new ResponseEntity<List<Pizza>>(filteredPizzas, HttpStatus.OK);
 	}
 	
-	@PostMapping("/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Pizza> getPizza(@PathVariable int id) {
 		Optional<Pizza> optPizza = pizzaService.findById(id);
 		
